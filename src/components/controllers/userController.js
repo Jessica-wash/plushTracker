@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const { UniqueConstraintError, ValidationError } = require('sequelize');
 const validateJWT = require('../middleware/validateSession');
 
+
+// Register endpoint
 router.post('/register', async (req, res) => {
     let {firstName, lastName, email, password} = req.body
     console.log(req.body)
@@ -47,7 +49,7 @@ router.post('/register', async (req, res) => {
 
 
 
-// !Login endpoint
+// Login endpoint
 
 router.post('/login', async(req,res) => {
     let { email, password } = req.body;
@@ -84,5 +86,7 @@ router.post('/login', async(req,res) => {
         })
     }
 });
+
+
 
 module.exports = router;

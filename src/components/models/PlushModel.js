@@ -16,7 +16,7 @@ const Plush = db.define("plush", {
     },
     link: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
 });
 
