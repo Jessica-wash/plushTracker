@@ -1,14 +1,20 @@
 {
   "name": "plush-tracker",
   "version": "0.1.0",
+  "dialect": "postgres",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
+    "sequelize": "^6.6.5",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -34,5 +40,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/node": "^16.0.1",
+    "@types/validator": "^13.6.3"
   }
 }

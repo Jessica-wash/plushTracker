@@ -5,17 +5,17 @@ const app = Express();
 const dbConnection = require('./db');
 
 app.use(Express.json());
-const controllers = require('./controllers');
+const controllers = require('./src/components/controllers');
 
 app.use('/test', (req, res) => {
     res.send('test message')
 });
 
-app.use(require('./middleware/headers'));
+app.use(require('./src/components/middleware/headers'));
 
 app.use('/user', controllers.userController);
 
-app.use(require('./middleware/validateSession'));
+app.use(require('./src/components/middleware/validateSession'));
 // app.use('/user/delete', controllers.userController);
 app.use('/plushController', controllers.plushController);
 

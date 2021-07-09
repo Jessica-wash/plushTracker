@@ -1,5 +1,5 @@
 const {DataTypes} = require('sequelize')
-const db = require('../db')
+const db = require('../../../db')
 
 const User = db.define('user', {
     firstName: {
@@ -20,7 +20,13 @@ const User = db.define('user', {
         type: DataTypes.STRING(),
         validate: {len: [5, 100]},
         allowNull: false
-    }
+    },
+    role: {
+        type: DataTypes.ENUM,
+        values: ['user', 'admin'],
+        allowNull: false,
+        defaultValue: 'user'
+    },
 })
 
 

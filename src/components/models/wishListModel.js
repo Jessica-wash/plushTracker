@@ -1,7 +1,7 @@
 const {DataTypes} = require('sequelize');
 const db = require('../../../db');
 
-const Plush = db.define("ownedPlush", {
+const Plush = db.define("wishList", {
     name: {
         type: DataTypes.STRING,
         allowNull: false,

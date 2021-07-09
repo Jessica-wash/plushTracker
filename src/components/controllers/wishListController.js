@@ -1,10 +1,19 @@
+// const { DataTypes } = require('sequelize');
+// const db = require('../../../db')
+// const Express = require('express');
+// const { PlushCollection } = require('../models');
+// const validateJWT = require('../middleware/validateSession');
+// const router = Express.Router();
+
 //const db = require('../../../db')
 const Express = require('express');
 const { PlushCollection } = require('../models');
 const validateJWT = require('../middleware/validateSession');
 const router = Express.Router();
 const { PlushModel } = require('../models');
-const { validateRole } = require('../middleware');
+const { validateRole} = require('../middleware');
+
+
 
 
 //// Create plush
@@ -18,14 +27,14 @@ router.post('/create',  validateJWT, async (req, res) => {
         link: link,
         owner_id: id
     }
-    console.log(req.user.id, req.body, plushEntry)
+    // console.log(req.user.id, req.body, plushEntry)
     try {
-        const newPlush = await PlushModel.create(plushEntry);
+        const newPlush = await PlushModel.create(PlushEntry);
         res.status(200).json(newPlush);
     }
     catch(err) {
-        //console.log(err)
-        res.status(500).json({error: `error message ${err}`})
+        console.log(err)
+        res.status(500).json({error: err})
     }
     // PlushModel.create(plushEntry)
 })
@@ -56,7 +65,7 @@ router.post('/admin/create',  validateRole, async (req, res) => {
 
 
 
-/// Get plush by userid
+/// Get plush list by user
 router.get('/:id', validateJWT, async (req, res) => {
     let { id } = req.user;
     try {
@@ -71,6 +80,7 @@ router.get('/:id', validateJWT, async (req, res) => {
         res.status(500).json({error: err})
     }
 })
+
 
 // ADMIN VIEW
 router.get('/admin/:id', validateRole, async (req, res) => {
@@ -151,7 +161,7 @@ router.put('/admin/update/:plushId', validateRole, async (req, res) => {
 
 
 
-//Delete Plush              CHECK THIS ENDPOINT
+//Create a delete plush from list endpoint
 router.delete('/delete/:id', validateJWT, async (req, res) => {
     const ownerId = req.user.id;
     const plushId = req.params.id;
@@ -170,6 +180,7 @@ router.delete('/delete/:id', validateJWT, async (req, res) => {
         res.status(500).json({error: err})
     }
 })
+
 
 // ADMIN DELETE
 router.delete('/admin/delete/:id', validateRole, async (req, res) => {
@@ -190,6 +201,5 @@ router.delete('/admin/delete/:id', validateRole, async (req, res) => {
         res.status(500).json({error: err})
     }
 })
-
 
 module.exports = router

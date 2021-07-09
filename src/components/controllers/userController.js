@@ -1,24 +1,28 @@
 const router = require("express").Router();
+// const db = require('../../../db')
 const {UserModel} = require("../models");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { UniqueConstraintError, ValidationError } = require('sequelize');
-const validateJWT = require('../middleware/validateSession');
+//const validateJWT = require('../middleware/validateSession');
+//const validateRole = require('../middleware');
+
 
 
 // Register endpoint
 router.post('/register', async (req, res) => {
-    let {firstName, lastName, email, password} = req.body
+    let {firstName, lastName, email, password, role} = req.body
     console.log(req.body)
     try{
         const user = await UserModel.create({
-            firstName:firstName,
+            firstName: firstName,
             lastName: lastName,
             email: email,
-            password: bcrypt.hashSync(password, 13)
+            password: bcrypt.hashSync(password, 13),
+            role: role
         })
         const token = jwt.sign(
-            {id: user.id,},
+            {id: user.id, role: user.role},
             process.env.JWT_SECRET,
             {expiresIn: 60 * 60 * 12}
         )
@@ -61,7 +65,7 @@ router.post('/login', async(req,res) => {
             let passwordComparison = await bcrypt.compare(password, loginUser.password);
             if(passwordComparison) {
                 let token = jwt.sign(
-                    {id: loginUser.id},
+                    {id: loginUser.id, role: loginUser.admin},
                     process.env.JWT_SECRET,
                      {expiresIn: 60 * 60 * 12}
                 );
