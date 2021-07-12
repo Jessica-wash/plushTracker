@@ -1,7 +1,7 @@
 const {DataTypes} = require('sequelize');
 const db = require('../../../db');
 
-const Plush = db.define("wishList", {
+const WishList = db.define("wishList", {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -20,4 +20,4 @@ const Plush = db.define("wishList", {
     },
 });
 
-module.exports = Plush;
+module.exports = WishList;

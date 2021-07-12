@@ -1,6 +1,4 @@
-//const db = require('../../../db')
 const Express = require('express');
-const { PlushCollection } = require('../models');
 const validateJWT = require('../middleware/validateSession');
 const router = Express.Router();
 const { PlushModel } = require('../models');
@@ -34,13 +32,13 @@ router.post('/create',  validateJWT, async (req, res) => {
 //  ADMIN CREATE
 router.post('/admin/create',  validateRole, async (req, res) => {
     const {name, bio, description, link} = req.body;
-    const {id} = req.user;
+    const {id} = req.role;
     const plushEntry = {
         name :name,
         bio: bio,
         description: description,
         link: link,
-        owner_id: id
+        owner_id: id,
     }
     console.log(req.user.id, req.body, plushEntry)
     try {
@@ -74,11 +72,11 @@ router.get('/:id', validateJWT, async (req, res) => {
 
 // ADMIN VIEW
 router.get('/admin/:id', validateRole, async (req, res) => {
-    let { id } = req.user;
+    let { id } = req.admin;
     try {
         const userPlush = await PlushModel.findAll({
             where: {
-            owner_id: id,
+            owner_id: user,
             completed: false
         }
         });
@@ -124,7 +122,7 @@ router.put('/update/:plushId', validateJWT, async (req, res) => {
 router.put('/admin/update/:plushId', validateRole, async (req, res) => {
     const {name, bio, description, link} = req.body;
     const listId = req.params.plushId;
-    const userId = req.user.id;
+    const userId = req.user.admin;
 
     const query = {
         where: {
@@ -152,7 +150,7 @@ router.put('/admin/update/:plushId', validateRole, async (req, res) => {
 
 
 //Delete Plush              CHECK THIS ENDPOINT
-router.delete('/delete/:id', validateJWT, async (req, res) => {
+router.delete('/delete', validateJWT, async (req, res) => {
     const ownerId = req.user.id;
     const plushId = req.params.id;
 
@@ -173,7 +171,7 @@ router.delete('/delete/:id', validateJWT, async (req, res) => {
 
 // ADMIN DELETE
 router.delete('/admin/delete/:id', validateRole, async (req, res) => {
-    const ownerId = req.user.id;
+    const ownerId = req.user.admin;
     const plushId = req.params.id;
 
     try {

@@ -1,17 +1,8 @@
-// const { DataTypes } = require('sequelize');
-// const db = require('../../../db')
-// const Express = require('express');
-// const { PlushCollection } = require('../models');
-// const validateJWT = require('../middleware/validateSession');
-// const router = Express.Router();
-
-//const db = require('../../../db')
 const Express = require('express');
-const { PlushCollection } = require('../models');
-const validateJWT = require('../middleware/validateSession');
+const validateJWT = require('../middleware');
 const router = Express.Router();
-const { PlushModel } = require('../models');
-const { validateRole} = require('../middleware');
+const { WishModel } = require('../models');
+const validateRole  = require('../middleware');
 
 
 
@@ -20,7 +11,7 @@ const { validateRole} = require('../middleware');
 router.post('/create',  validateJWT, async (req, res) => {
     const {name, bio, description, link} = req.body;
     const {id} = req.user;
-    const plushEntry = {
+    const PlushEntry = {
         name :name,
         bio: bio,
         description: description,
@@ -29,21 +20,21 @@ router.post('/create',  validateJWT, async (req, res) => {
     }
     // console.log(req.user.id, req.body, plushEntry)
     try {
-        const newPlush = await PlushModel.create(PlushEntry);
+        const newPlush = await WishModel.create(PlushEntry);
         res.status(200).json(newPlush);
     }
     catch(err) {
         console.log(err)
         res.status(500).json({error: err})
     }
-    // PlushModel.create(plushEntry)
+    // WishModel.create(plushEntry)
 })
 
 
 //  ADMIN CREATE
 router.post('/admin/create',  validateRole, async (req, res) => {
     const {name, bio, description, link} = req.body;
-    const {id} = req.user;
+    const {id} = req.admin;
     const plushEntry = {
         name :name,
         bio: bio,
@@ -53,14 +44,14 @@ router.post('/admin/create',  validateRole, async (req, res) => {
     }
     console.log(req.user.id, req.body, plushEntry)
     try {
-        const newPlush = await PlushModel.create(plushEntry);
+        const newPlush = await WishModel.create(plushEntry);
         res.status(200).json(newPlush);
     }
     catch(err) {
         //console.log(err)
         res.status(500).json({error: `error message ${err}`})
     }
-    // PlushModel.create(plushEntry)
+    // WishModel.create(plushEntry)
 })
 
 
@@ -69,10 +60,9 @@ router.post('/admin/create',  validateRole, async (req, res) => {
 router.get('/:id', validateJWT, async (req, res) => {
     let { id } = req.user;
     try {
-        const userPlush = await PlushModel.findAll({
+        const userPlush = await WishModel.findAll({
             where: {
-            owner_id: id,
-            completed: false
+            owner_id: id
         }
         });
         res.status(200).json(userPlush);
@@ -84,12 +74,11 @@ router.get('/:id', validateJWT, async (req, res) => {
 
 // ADMIN VIEW
 router.get('/admin/:id', validateRole, async (req, res) => {
-    let { id } = req.user;
+    let { id } = req.user.role;
     try {
-        const userPlush = await PlushModel.findAll({
+        const userPlush = await WishModel.findAll({
             where: {
-            owner_id: id,
-            completed: false
+            owner_id: id
         }
         });
         res.status(200).json(userPlush);
@@ -121,7 +110,7 @@ router.put('/update/:plushId', validateJWT, async (req, res) => {
         link: link,
     };
     try {
-        const update = await PlushModel.update(updateList, query);
+        const update = await WishModel.update(updateList, query);
         res.status(200).json(update);
     } catch (err) {
         console.log(err)
@@ -134,7 +123,7 @@ router.put('/update/:plushId', validateJWT, async (req, res) => {
 router.put('/admin/update/:plushId', validateRole, async (req, res) => {
     const {name, bio, description, link} = req.body;
     const listId = req.params.plushId;
-    const userId = req.user.id;
+    const userId = req.user.admin;
 
     const query = {
         where: {
@@ -150,7 +139,7 @@ router.put('/admin/update/:plushId', validateRole, async (req, res) => {
         link: link,
     };
     try {
-        const update = await PlushModel.update(updateList, query);
+        const update = await WishModel.update(updateList, query);
         res.status(200).json(update);
     } catch (err) {
         console.log(err)
@@ -174,7 +163,7 @@ router.delete('/delete/:id', validateJWT, async (req, res) => {
             }
         };
 
-        await PlushModel.destroy(query);
+        await WishModel.destroy(query);
         res.status(200).json({ msg: "Plush has been removed"});
     } catch (err) {
         res.status(500).json({error: err})
@@ -184,7 +173,7 @@ router.delete('/delete/:id', validateJWT, async (req, res) => {
 
 // ADMIN DELETE
 router.delete('/admin/delete/:id', validateRole, async (req, res) => {
-    const ownerId = req.user.id;
+    const ownerId = req.user.admin;
     const plushId = req.params.id;
 
     try {
@@ -195,7 +184,7 @@ router.delete('/admin/delete/:id', validateRole, async (req, res) => {
             }
         };
 
-        await PlushModel.destroy(query);
+        await WishModel.destroy(query);
         res.status(200).json({ msg: "Plush has been removed"});
     } catch (err) {
         res.status(500).json({error: err})

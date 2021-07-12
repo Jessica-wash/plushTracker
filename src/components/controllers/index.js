@@ -1,4 +1,6 @@
-module.exports = {
+module.exports  = {
     plushController: require('./plushController'),
-    userController: require('./userController')
+    userController: require('./userController'),
+    wishListController: require('./wishListController')
 }
+

@@ -1,6 +1,6 @@
 require("dotenv").config;
 const jwt = require('jsonwebtoken');
-const { UserModel } = require('../models/UserModel');
+const { UserModel } = require('../models');
 
 const validateJWT = async (req, res, next) => {
     console.log(req.headers)
@@ -14,13 +14,9 @@ const validateJWT = async (req, res, next) => {
         const payload = authorization ? jwt.verify( authorization, process.env.JWT_SECRET): undefined;
             // console.log("payload -->", payload);
 
-        if (payload) {
+        if (payload.role === "admin") {
             let foundUser = await UserModel.findOne({
-                where: { 
-                    id: payload.id,
-                    role: "admin", 
-                },
-            });
+                where: { id: payload.id }});
             // console.log("foundUser -->", foundUser);
 
             if (foundUser) {

@@ -1,4 +1,5 @@
-const PlushModel = require('./PlushModel');
-const UserModel = require('./UserModel');
-
-module.exports = {PlushModel, UserModel}
+module.exports = {
+    PlushModel: require('./PlushModel'),
+    UserModel: require('./UserModel'),
+    WishModel: require('./wishListModel'),
+};

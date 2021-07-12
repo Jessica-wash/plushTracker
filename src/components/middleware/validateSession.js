@@ -1,6 +1,6 @@
 require("dotenv").config;
 const jwt = require('jsonwebtoken');
-const { UserModel } = require('../models');
+const { UserModel } = require ('../models');
 
 const validateJWT = async (req, res, next) => {
     console.log(req.headers)

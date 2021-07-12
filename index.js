@@ -18,6 +18,7 @@ app.use('/user', controllers.userController);
 app.use(require('./src/components/middleware/validateSession'));
 // app.use('/user/delete', controllers.userController);
 app.use('/plushController', controllers.plushController);
+app.use('/wishList', controllers.wishListController );
 
 dbConnection.authenticate()
     //.then(() => dbConnection.sync({force: true}))

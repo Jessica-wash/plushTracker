@@ -1,11 +1,10 @@
 const router = require("express").Router();
-// const db = require('../../../db')
 const {UserModel} = require("../models");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { UniqueConstraintError, ValidationError } = require('sequelize');
 //const validateJWT = require('../middleware/validateSession');
-//const validateRole = require('../middleware');
+const validateRole = require('../middleware');
 
 
 
